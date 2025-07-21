@@ -1,4 +1,7 @@
 // ==UserScript==
+// @grant        none
+// @downloadURL  https://iximeq.github.io/grepolis-autofarm-install/grepolis_autofarm.user.js
+// @updateURL    https://iximeq.github.io/grepolis-autofarm-install/grepolis_autofarm.user.js
 // @name         Grepolis AutoFarm Premium + Konsola w menu
 // @namespace    https://pl135.grepolis.com/
 // @version      3.7
