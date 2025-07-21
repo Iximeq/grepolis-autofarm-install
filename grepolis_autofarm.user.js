@@ -33,35 +33,47 @@
     }
 
     function farm() {
-        log("🔄 Próba farmienia (Premium)...");
+    log("🔄 Próba farmienia (Premium)...");
 
-        const selectAll = document.querySelector(".checkbox.select_all");
-        const claimBtn = document.querySelector("#fto_claim_button");
+    const selectAll = document.querySelector(".checkbox.select_all");
+    const claimBtn = document.querySelector("#fto_claim_button");
 
-        if (selectAll && !selectAll.classList.contains("checked")) {
-            selectAll.click();
-            log("✅ Zaznaczono wszystkie miasta.");
+    const tryClickClaim = () => {
+        const activeClaimBtn = document.querySelector("#fto_claim_button:not(.disabled)");
+        if (activeClaimBtn) {
+            activeClaimBtn.click();
+            log("✅ Kliknięto Odbierz.");
+            return true;
+        }
+        return false;
+    };
 
-            // Poczekaj 500 ms zanim klikniesz "Odbierz"
-            setTimeout(() => {
-                if (claimBtn && !claimBtn.classList.contains("disabled")) {
-                    claimBtn.click();
-                    log("✅ Kliknięto Odbierz.");
-                } else {
-                    log("⚠️ Odbierz nieaktywny lub brak dostępnych wiosek.");
+    if (selectAll && !selectAll.classList.contains("checked")) {
+        selectAll.click();
+        log("✅ Zaznaczono wszystkie miasta.");
+
+        let attempts = 0;
+        const maxAttempts = 20; // 2 sekundy max (20 * 100ms)
+
+        const waitForActive = setInterval(() => {
+            if (tryClickClaim() || attempts >= maxAttempts) {
+                if (attempts >= maxAttempts) {
+                    log("⚠️ Przycisk Odbierz nadal nieaktywny po 2s.");
                 }
-            }, 500);
-
-        } else {
-            // Jeśli "zaznacz wszystkie" już jest zaznaczone, kliknij od razu odbierz
-            if (claimBtn && !claimBtn.classList.contains("disabled")) {
-                claimBtn.click();
-                log("✅ Kliknięto Odbierz.");
-            } else {
-                log("⚠️ Odbierz nieaktywny lub brak dostępnych wiosek.");
+                clearInterval(waitForActive);
             }
+            attempts++;
+        }, 100);
+
+    } else {
+        if (tryClickClaim()) {
+            log("✅ Kliknięto Odbierz.");
+        } else {
+            log("⚠️ Odbierz nieaktywny lub brak dostępnych wiosek.");
         }
     }
+}
+
 
     function createGrepoWindow() {
         if (document.getElementById("autofarm_window")) return;
